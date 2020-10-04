@@ -10,39 +10,39 @@
 
 USAGE :
 
-	$equisol = new equiSol();
+$equisol = new equiSol();
 
-	//set timezone (optionnal)
-	//if not set, the class will be using UTC
-	$equisol->set_Timezone('Europe/Paris');
+//set timezone (optionnal)
+//if not set, the class will be using UTC
+$equisol->set_Timezone('Europe/Paris');
 
-	//set year (optionnal)
-	//if not set, the class will be using current server year
-	$equisol->set_Year(2022);
+//set year (optionnal)
+//if not set, the class will be using current server year
+$equisol->set_Year(2022);
 	
-	//get spring date
-	$springDate = $equisol->get_spring();
+//get spring date
+$springDate = $equisol->get_spring();
 
-	//or you can also pass desired year
-	$springDate = $equisol->get_spring(2054);
+//or you can also pass desired year
+$springDate = $equisol->get_spring(2054);
 
-	print_r($springDate);
+print_r($springDate);
 
-	//	DateTime Object
-	//	(
-	//   	 [date] => 2054-03-20 10:35:41.000000
-	//  	 [timezone_type] => 3
-	//   	 [timezone] => Europe/Paris
-	//	)
+//	DateTime Object
+//	(
+//   	 [date] => 2054-03-20 10:35:41.000000
+//  	 [timezone_type] => 3
+//   	 [timezone] => Europe/Paris
+//	)
 
 
-	//you can also use
-	// $equisol->get_summer();
-	// $equisol->get_autumn();
-	// $equisol->get_winter();
+//you can also use
+// $equisol->get_summer();
+// $equisol->get_autumn();
+// $equisol->get_winter();
 
-	//also
-	// $equisol->get_4season();
+//also
+// $equisol->get_4season();
 
 */
 
