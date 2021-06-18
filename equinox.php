@@ -1,16 +1,15 @@
 <?php
-// CLASS equiSol
+// CLASS EquiSol
 // Compute date and times of equinoxes and soltices at a given year and timezone
 // valid for years range 1000-3000
 // Algorithms taken from Meeus Astronomical Algorithms, 2nd edition
-// adaptation in PHP by Antoine BARON antoinebaron.io
 
 
 /*
 
 USAGE :
 
-$equisol = new equiSol();
+$equisol = new EquiSol();
 
 //set timezone (optionnal)
 //if not set, the class will be using UTC
@@ -47,99 +46,84 @@ print_r($springDate);
 */
 
 
-class equiSol{
+class EquiSol{
+	
+	protected $timezone;
+	protected $year;
+
+	public function __construct() {
+		
+    		///default values for timezone and year
+		$this->timezone= 'UTC';
+		$this->year = date('Y');
+	}
+
+	public function set_Timezone($timezone){
+		$this->timezone = $timezone;
+	}
+
+	public function set_Year($year){
+		$this->year = $year;
+	}
+
+	///////// get all 4 season's date 
+	public function get_4season($year=false){
+
+  		/// use either passed, declared (or default) year
+		if($year!=false) $y = $year; 
+			else $y = $this->year; 
+
+		return array(
+			'spring' => $this->compute(0, $y),
+			'summer' => $this->compute(1, $y),
+			'autumn' => $this->compute(2, $y),
+			'winter' => $this->compute(3, $y)
+		);
+
+	}
 
 
-    public $timezone;
-	public $year;
+	///////// get SPRING date of a given year
+	public function get_spring($year = false){
 
-    function __construct() {
+		return $this->getOneSeasonDate(0, $year);
+	}
 
-    	///default values for timezone and year
-        $this->timezone= 'UTC';
-        $this->year = date('Y');
-    }
+	///////// get SUMMER date of a given year
+	public function get_summer($year = false){
+
+		return $this->getOneSeasonDate(1, $year);
+	}
+
+	///////// get AUTUMN date of a given year
+	public function get_autumn($year = false){
+
+		return $this->getOneSeasonDate(2, $year);
+	}
+
+	///////// get WINTER date of a given year
+	public function get_winter($year = false){
+
+		return $this->getOneSeasonDate(3, $year);
+
+	}
+	
+	///////// get season date from id
+	///////// 0 = spring, 1 = summer, 2 = autumn, 3 = winter
+	private function getOneSeasonDate($seasonID, $year){
+
+		/// use either passed, declared (or default) year
+		if($year!=false) $y = $year; 
+			else $y = $this->year; 
+
+		return $this->compute($seasonID, $y);
+
+	}
+
 
 	/////////////////////////////////////////
-    /////////[ SETS ]/////////
-    /////////////////////////////////////////
-
-    public function set_Timezone($timezone){
-        $this->timezone = $timezone;
-    }
-
-    public function set_Year($year){
-        $this->year = $year;
-    }
-
-
-
-    /////////////////////////////////////////
-    /////////[ GETS ]/////////
-    /////////////////////////////////////////
-
-    ///////// get all 4 season's date 
-    public function get_4season($year=false){
-
-    	/// use either passed, declared (or default) year
-    	if($year!=false) $y = $year; 
-    		else $y = $this->year; 
-
-
-		  	return array(
-		  		'spring' => $this->compute(0, $y),
-		  		'summer' => $this->compute(1, $y),
-		  		'autumn' => $this->compute(2, $y),
-		  		'winter' => $this->compute(3, $y)
-		  	);
-
-    }
-
-
-    ///////// get SPRING date of a given year
-    public function get_spring($year = false){
-
-    	return $this->getOneSeasonDate(0, $year);
-
-    }
-
-    ///////// get SUMMER date of a given year
-    public function get_summer($year = false){
-
-    	return $this->getOneSeasonDate(1, $year);
-
-    }
-
-    ///////// get AUTUMN date of a given year
-    public function get_autumn($year = false){
-
-    	return $this->getOneSeasonDate(2, $year);
-
-    }
-
-    ///////// get WINTER date of a given year
-    public function get_winter($year = false){
-
-    	return $this->getOneSeasonDate(3, $year);
-
-    }
-
-    ///////// retreive season date depending on id
-    ///////// 0 = spring, 1 = summer, 2 = autumn, 3 = winter
-    private function getOneSeasonDate($seasonID, $year){
-
-    	/// use either passed, declared (or default) year
-    	if($year!=false) $y = $year; 
-    		else $y = $this->year; 
-
-    	return $this->compute($seasonID, $y);
-
-    }//private function getOneSeasonDate($seasonID, $year)
-
-
-    /////////////////////////////////////////
-    /////////[ COMPUTING FUNCTIONS ]/////////
-    /////////////////////////////////////////
+	/////////[ COMPUTING FUNCTIONS ]/////////
+	/////////////////////////////////////////
 
 	///////// compute event (Equiniox or Solstice)
 	///////// Meeus Astronmical Algorithms Chapter 27
@@ -166,8 +150,7 @@ class equiSol{
 		$dateOBJ = $this->julianToDateObj($localJD);
 
 		return $dateOBJ;
-
-	} // private function compute( $i, $year )
+	} 
 
 
 	///////// julian date to php DateTime 
@@ -195,7 +178,7 @@ class equiSol{
 
 		}//if($this->timezone!='UTC'){
 
-	}//private function jd2local($utJdate)
+	}
 
 
 	///////// equinox or soltice mean time
@@ -222,7 +205,7 @@ class equiSol{
 		}
 
 
-	} // private function equiSolMeanTime( $k, $year )
+	} 
 
 
 
@@ -244,50 +227,49 @@ class equiSol{
 		}
 
 		return $s;
-	}//private function periodicTerms24( $t ) 
+	}
 
-
-
-    ///////// convert julian to date 
+	///////// convert julian to date 
 	private function julian2date($julian) {
 
 		$julian += 0.5;             
-		$hms	= ($julian - floor($julian)) * 86400.0;
-		$a 		= floor($julian) + 1 + floor(($julian - 1867216.25) / 36524.25) 
-				- floor((($julian - 1867216.25) / 36524.25) / 4) + 1524;
-		$b 		= floor(($a - 122.1) / 365.25);
-		$c 		= floor(365.25 * $b);
-		$d 		= floor(($a - $c) / 30.6001);
-		$month 	= floor(($d < 14) ? ($d - 1) : ($d - 13));
-		$year	= floor(($month > 2) ? ($b - 4716) : ($b - 4715));
-		$day	= floor($a - $c - floor(30.6001 * $d) + ($julian - floor($julian)));
-		$hour	= floor($hms / 3600);
-		$minute	= floor(($hms / 60) % 60);
+		$hms = ($julian - floor($julian)) * 86400.0;
+		$a = floor($julian) + 1 + floor(($julian - 1867216.25) / 36524.25) - floor((($julian - 1867216.25) / 36524.25) / 4) + 1524;
+		$b = floor(($a - 122.1) / 365.25);
+		$c = floor(365.25 * $b);
+		$d  = floor(($a - $c) / 30.6001);
+		$month = floor(($d < 14) ? ($d - 1) : ($d - 13));
+		$year = floor(($month > 2) ? ($b - 4716) : ($b - 4715));
+		$day = floor($a - $c - floor(30.6001 * $d) + ($julian - floor($julian)));
+		$hour = floor($hms / 3600);
+		$minute = floor(($hms / 60) % 60);
 		$second	= floor($hms % 60);
-
 		
-		$date=array( 'year'=>$year, 'month'=>$month, 'day'=>$day, 
-			'hour'=>$hour, 'minute'=>$minute, 'second'=>$second );
-
+		$date = compact('year', 'month', 'day', 'hour', 'minute', 'second');
+		
 		return $date;
 
-	}//private function julian2date($julian) 
-
+	}
 
 
 	/////// Convert ut Julian date to local julian date
 	private function utJulian2Local($utJulianDate, $timeZone = false){
 
-		if($timeZone==false){ $timeZone = $this->timezone; }
+		if($timeZone==false)
+			$timeZone = $this->timezone;
 	 
-		$oneJulianHour='0.04167';
-		$offsetFromUt=$this->getTimeZoneOffsetFromUt($timeZone, $utJulianDate);
-		if($offsetFromUt>0){ return $utJulianDate+($offsetFromUt*$oneJulianHour);
-		}elseif($offsetFromUt<0){ return $utJulianDate-(abs($offsetFromUt)*$oneJulianHour);
-		}else{ return $utJulianDate; }
+		$oneJulianHour = '0.04167';
+		$offsetFromUt = $this->getTimeZoneOffsetFromUt($timeZone, $utJulianDate);
+		
+		if($offsetFromUt>0){ 
+			return $utJulianDate+($offsetFromUt*$oneJulianHour);
+		}elseif($offsetFromUt<0){ 
+			return $utJulianDate-(abs($offsetFromUt)*$oneJulianHour);
+		}else{ 
+			return $utJulianDate; 
+		}
 	}
 
-	
 	/////// Get timezone offset
 	private function getTimeZoneOffsetFromUt($originTz, $julian) {
 
@@ -295,14 +277,13 @@ class equiSol{
 	    $remoteDtz = new DateTimeZone('UTC');
 	    $dateArray=$this->julian2date($julian);
 	    $date = $dateArray['year'] . "-" . $dateArray['month'] . "-" . $dateArray['day'] . " " . $dateArray['hour'] . ":" . $dateArray['minute'] . ":" . $dateArray['second'];
-	    
 	    $originDt = new DateTime($date, $originDtz);
 	    $remoteDt = new DateTime($date, $remoteDtz);
 	    $offset = $originDtz->getOffset($originDt) - $remoteDtz->getOffset($remoteDt);
 	    return ($offset/60)/60;
 	}
 
-}//class equiSol{
+}
 
 
 
