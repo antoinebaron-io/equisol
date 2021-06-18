@@ -79,7 +79,6 @@ class EquiSol{
 			'autumn' => $this->compute(2, $y),
 			'winter' => $this->compute(3, $y)
 		);
-
 	}
 
 
@@ -105,7 +104,6 @@ class EquiSol{
 	public function get_winter($year = false){
 
 		return $this->getOneSeasonDate(3, $year);
-
 	}
 	
 	///////// get season date from id
@@ -117,7 +115,6 @@ class EquiSol{
 			else $y = $this->year; 
 
 		return $this->compute($seasonID, $y);
-
 	}
 
 
@@ -177,7 +174,6 @@ class EquiSol{
 			return $utJdate;
 
 		}//if($this->timezone!='UTC'){
-
 	}
 
 
@@ -203,8 +199,6 @@ class EquiSol{
 		  		return  2451900.05952 + 365242.74049*$y - 0.06223*pow($y,2) - 0.00823*pow($y,3) + 0.00032*pow($y,4); 
 		  	break;
 		}
-
-
 	} 
 
 
@@ -248,7 +242,6 @@ class EquiSol{
 		$date = compact('year', 'month', 'day', 'hour', 'minute', 'second');
 		
 		return $date;
-
 	}
 
 
@@ -282,7 +275,6 @@ class EquiSol{
 	    $offset = $originDtz->getOffset($originDt) - $remoteDtz->getOffset($remoteDt);
 	    return ($offset/60)/60;
 	}
-
 }
 
 
