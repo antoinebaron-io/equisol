@@ -108,7 +108,7 @@ class EquiSol{
 	
 	///////// get season date from id
 	///////// 0 = spring, 1 = summer, 2 = autumn, 3 = winter
-	private function getOneSeasonDate($seasonID, $year){
+	protected function getOneSeasonDate($seasonID, $year){
 
 		/// use either passed, declared (or default) year
 		if($year!=false) $y = $year; 
@@ -124,7 +124,7 @@ class EquiSol{
 
 	///////// compute event (Equiniox or Solstice)
 	///////// Meeus Astronmical Algorithms Chapter 27
-	private function compute( $i, $year ) {
+	protected function compute( $i, $year ) {
 
 		//find equinox or soltice mean time
 		$jde0 = $this->equiSolMeanTime( $i, $year);
@@ -151,7 +151,7 @@ class EquiSol{
 
 
 	///////// julian date to php DateTime 
-	private function julianToDateObj($jd){
+	protected function julianToDateObj($jd){
 
 		$d = $this->julian2date($jd);
 		$date = new DateTime($d['year'] ."-". $d['month'] ."-". $d['day'] ."T". $d['hour'] .":". $d['minute'] .":". $d['second'], 
@@ -161,7 +161,7 @@ class EquiSol{
 	}
 
 	///////// Convert result JD to defined timezone
-	private function jd2local($utJdate){
+	protected function jd2local($utJdate){
 
 		// if defined timezone is different from UTC
 		// convert ut to local
@@ -178,7 +178,7 @@ class EquiSol{
 
 
 	///////// equinox or soltice mean time
-	private function equiSolMeanTime( $k, $year ) { 
+	protected function equiSolMeanTime( $k, $year ) { 
 
 		$y=($year-2000)/1000;
 		switch( $k ) {
@@ -205,7 +205,7 @@ class EquiSol{
 
 	///////// Calculate 24 Periodic Terms
 	///////// Meeus Astronmical Algorithms page 179 Table 27.C
-	private function periodicTerms24( $t ) {
+	protected function periodicTerms24( $t ) {
 
 		$a = array(485,203,199,182,156,136,77,74,70,58,52,50,45,44,29,18,17,16,14,12,12,12,9,8);
 		$b = array(324.96,337.23,342.08,27.85,73.14,171.52,222.54,296.72,243.58,119.81,297.17,21.02,
@@ -224,7 +224,7 @@ class EquiSol{
 	}
 
 	///////// convert julian to date 
-	private function julian2date($julian) {
+	protected function julian2date($julian) {
 
 		$julian += 0.5;             
 		$hms = ($julian - floor($julian)) * 86400.0;
@@ -246,7 +246,7 @@ class EquiSol{
 
 
 	/////// Convert ut Julian date to local julian date
-	private function utJulian2Local($utJulianDate, $timeZone = false){
+	protected function utJulian2Local($utJulianDate, $timeZone = false){
 
 		if($timeZone==false)
 			$timeZone = $this->timezone;
@@ -264,7 +264,7 @@ class EquiSol{
 	}
 
 	/////// Get timezone offset
-	private function getTimeZoneOffsetFromUt($originTz, $julian) {
+	protected function getTimeZoneOffsetFromUt($originTz, $julian) {
 
 	    $originDtz = new DateTimeZone($originTz);
 	    $remoteDtz = new DateTimeZone('UTC');
